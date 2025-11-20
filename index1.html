@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project Management</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>Project Management</h1>
+  </div>
+
+  <div class="tab">
+    <button class="tablink" onclick="openPage(event, 'Home')">Home</button>
+    <button class="tablink" onclick="openPage(event, 'Login')">Login</button>
+    <button class="tablink" onclick="openPage(event, 'CreateProject')">Create Project</button>
+    <button class="tablink" onclick="openPage(event, 'AddMembers')">Add Members</button>
+    <button class="tablink" onclick="openPage(event, 'AddTasks')">Add Tasks</button>
+  </div>
+
+  <div id="Home" class="tabcontent">
+    <p>Project Management made <b>simple</b>.</p>
+  </div>
+
+  <div id="Login" class="tabcontent">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label>Username:</label><input type="text" name="username" required /><br />
+      <label>Password:</label><input type="password" name="password" required /><br />
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <div id="CreateProject" class="tabcontent">
+    <h2>Create Project</h2>
+    <form id="projectForm">
+      <label>Project Name:</label><input type="text" name="projectName" required /><br />
+      <label>Description:</label><textarea name="description"></textarea><br />
+      <button type="submit">Create</button>
+    </form>
+  </div>
+
+  <div id="AddMembers" class="tabcontent">
+    <h2>Add Members</h2>
+    <form id="memberForm">
+      <label>Member Email:</label><input type="email" name="memberEmail" required /><br />
+      <button type="submit">Add Member</button>
+    </form>
+  </div>
+
+  <div id="AddTasks" class="tabcontent">
+    <h2>Add Tasks</h2>
+    <form id="taskForm">
+      <label>Task Name:</label><input type="text" name="taskName" required /><br />
+      <label>Due Date:</label><input type="date" name="dueDate" /><br />
+      <button type="submit">Add Task</button>
+    </form>
+  </div>
+
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app1.js"></script>
+
+</body>
+</html>
+
