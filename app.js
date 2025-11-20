@@ -15,4 +15,31 @@ function openPage(evt, page) {
     evt.currentTarget.className += " active";
 }
 
-document.getElementsByClassName("tablink")[0].click()
+// Default to Home tab
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementsByClassName("tablink")[0].click();
+
+  // Handle Login
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    alert("Logged in successfully!");
+  });
+
+  // Handle Project Creation
+  document.getElementById("projectForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    alert("Project created!");
+  });
+
+  // Handle Member Addition
+  document.getElementById("memberForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    alert("Member added!");
+  });
+
+  // Handle Task Addition
+  document.getElementById("taskForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    alert("Task added!");
+  });
+});
