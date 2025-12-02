@@ -27,11 +27,31 @@ sql.connect(dbConfig).then(pool => {
     console.error("Database connection failed:", err);
 });
 
+app.post('/api/signup', async (req, res) => {
+    try {
+        const { fName, lName, email, password } = req.body;
+
+        const check = await sql.query`SELECT * FROM Developer WHERE Email = ${email}`;
+
+        if (check.recordset.length > 0) {
+            return res.status(400).json({success: false, message: "Email already used"});
+        }
+
+        await sql.query`INSERT INTO Developer (FName, LName, Email, Password)
+                        VALUES (${fName}, ${lName}, ${email}, ${password})`;
+
+        res.json({ success: true, message: "Account Created! Please login."});
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Sign Error");
+    }
+});
+
 app.post('/api/login', async (req, res) => {
     try { 
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        const result = await sql.query`SELECT * FROM Developer WHERE Email = ${username} AND Password = ${password}`;
+        const result = await sql.query`SELECT * FROM Developer WHERE Email = ${email} AND Password = ${password}`;
 
         if (result.recordset.length > 0) {
             res.json({ success: true, user: result.recordset[0]});
@@ -46,10 +66,16 @@ app.post('/api/login', async (req, res) => {
 
 app.post('/api/createProject', async (req, res) => {
     try {
-        const { projectName, description, targetDate } = req.body;
+        const { projectName, description, targetDate, developerID } = req.body;
 
-        await sql.query`INSERT INTO Project (ProjectName, ProjectDescription, StartDate, TargetDate)
-                        VALUES (${projectName}, ${description}, GETDATE(), ${targetDate})`;
+        const result = await sql.query`INSERT INTO Project (ProjectName, ProjectDescription, StartDate, TargetDate)
+                                       OUTPUT INSERTED.ProjectID
+                                       VALUES (${projectName}, ${description}, GETDATE(), ${targetDate})`;
+
+        const newProjectID = result.recordset[0].ProjectID;
+
+        await sql.query`INSERT INTO Project_Management (ProjectID, DeveloperID, Role)
+                        VALUES (${newProjectID}, ${developerID}, 'Editor')`;
 
         res.json({ success: true, message: "Project Created!"});
     } catch (err) {
@@ -60,15 +86,18 @@ app.post('/api/createProject', async (req, res) => {
 
 app.post('/api/addMember', async (req, res) => {
     try {
-        const { memberName, memberEmail } = req.body;
+        const { memberEmail, projectID, role } = req.body;
 
-        const nameParts = memberName.split(' ');
-        const fName = nameParts[0];
-        const lName = nameParts.length > 1 ? nameParts[1] : '';
-        const defaultPass = '12345';
+        const userResult = await sql.query`SELECT DeveloperID FROM Developer WHERE Email = ${memberEmail}`;
 
-        await sql.query`INSERT INTO Developer (FName, LName, Email, Password)
-                        VALUES (${fName}, ${lName}, ${memberEmail}, ${defaultPass})`;
+        if (userResult.recordset.length === 0) {
+            return res.status(404).json({ success: false, message: "User not found! First Sign Up."})
+        }
+
+        const devID = userResult.recordset[0].DeveloperID;
+
+        await sql.query`INSERT INTO Project_Management (ProjectID, DeveloperID, Role)
+                        VALUES (${projectID}, ${devID}, ${role})`;
 
         res.json({ success: true, message: "Member Added!" });
     } catch (err) {
@@ -79,17 +108,52 @@ app.post('/api/addMember', async (req, res) => {
 
 app.post('/api/addTask', async (req, res) => {
     try {
-        const { taskName, dueDate } = req.body;
-
-        const currentProjectID = 1;
+        const { taskName, dueDate, projectID, priority } = req.body;
 
         await sql.query`INSERT INTO Task (ProjectID, TaskDescription, StartDate, TargetDate, Priority)
-                        VALUES (${currentProjectID}, ${taskName}, GETDATE(), ${dueDate}, 'Medium')`;
+                        VALUES (${projectID}, ${taskName}, GETDATE(), ${dueDate}, ${priority})`;
 
         res.json({ success: true, message: "Task Added!" });
     } catch (err) {
         console.error(err);
         res.status(500).send("Add Task Error");
+    }
+});
+
+app.post('/api/myProjects', async (req,res) => {
+    try {
+        const { developerID } = req.body;
+
+        const projectResult = await sql.query`
+            SELECT P.ProjectID, P.ProjectName, P.ProjectDescription, P.TargetDate, PM.Role
+            FROM Project P
+            JOIN Project_Management PM ON P.ProjectID = PM.ProjectID
+            WHERE PM.DeveloperID = ${developerID}`;
+        
+        const projects = projectResult.recordset;
+
+        for (const project of projects) {
+            const memebersResult = await sql.query`
+            SELECT D.FName, D.LName, PM.Role
+            FROM Developer D
+            JOIN Project_Management PM ON D.DeveloperID = PM.DeveloperID
+            WHERE PM.ProjectID = ${project.ProjectID}`;
+
+            project.members = memebersResult.recordset;
+
+            const tasksResult = await sql.query`
+            SELECT TaskDescription, TargetDate AS DueDate, Priority, StartDate
+            FROM Task
+            WHERE ProjectID = ${project.ProjectID}`;
+
+            project.tasks = tasksResult.recordset; 
+        }
+
+        res.json({ success: true, projects: projects})
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error fetching projects");
     }
 });
 

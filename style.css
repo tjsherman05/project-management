@@ -15,6 +15,7 @@ body {
     margin: 0;
     font-family: sans-serif;
     min-height: 100vh;
+    background-color: tan;
 }
 
 .tab {
@@ -46,4 +47,81 @@ body {
 .tabcontent {
     display: none;
     padding: 6px 12px;
+}
+
+.homecontent {
+    color: white;
+    font-size: 50px;
+}
+
+label {
+    display: inline-block;
+    width: 120px;
+    text-align: right;
+    margin-right: 10px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.project-card {
+    border: 5px solid #924c24;
+    background-color: #ff8641;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    text-align: left;
+    color: white
+}
+
+.project-header {
+    color: black;
+    border-bottom: 3px solid #924c24 ;
+    padding-bottom: 10px;
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.role-badge {
+    font-size: 0.6em;
+    background-color: white;
+    color: black;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-body {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.info-box {
+    flex: 1;
+    background: #924c24;
+    padding: 15px;
+    border-radius: 8px;
+    border: 5px solid tan;
+}
+
+.info-box h4 {
+    margin-top: 0;
+    color: black;
+    font-size: 1em;
+    border-bottom: 3px solid tan;
+    padding-bottom: 5px;
+}
+
+.info-box ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+
 }

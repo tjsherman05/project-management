@@ -3,16 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Project Management</title>
+    <title>Project Manager</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="header">
-      <h1>Project Management</h1>
+      <h1>Project Manager</h1>
     </div>
 
     <div class="tab">
       <button class="tablink" onclick="openPage(event, 'Home')">Home</button>
+      <button class="tablink" onclick="openPage(event, 'SignUp')">
+        Sign Up
+      </button>
       <button class="tablink" onclick="openPage(event, 'Login')">Login</button>
       <button class="tablink" onclick="openPage(event, 'CreateProject')">
         Create Project
@@ -23,17 +26,36 @@
       <button class="tablink" onclick="openPage(event, 'AddTasks')">
         Add Tasks
       </button>
+      <button class="tablink" onclick="openPage(event, 'MyProjects')">
+        My Projects
+      </button>
     </div>
 
     <div id="Home" class="tabcontent">
-      <p>Project Management made <b>simple</b>.</p>
+      <p class="homecontent">
+        Project management made
+        <b style="color: #924c24; font-size: 30px">simple</b>.
+      </p>
+    </div>
+
+    <div id="SignUp" class="tabcontent">
+      <h2>Sign Up</h2>
+      <form id="signupForm">
+        <label>First Name: </label
+        ><input type="text" name="fName" required /><br />
+        <label>Last Name: </label
+        ><input type="text" name="lName" required /><br />
+        <label>Email: </label><input type="email" name="email" required /><br />
+        <label>Password: </label
+        ><input type="password" name="password" required /><br />
+        <button type="submit">Register</button>
+      </form>
     </div>
 
     <div id="Login" class="tabcontent">
       <h2>Login</h2>
       <form id="loginForm">
-        <label>Username: </label
-        ><input type="text" name="username" required /><br />
+        <label>Email: </label><input type="text" name="email" required /><br />
         <label>Password: </label
         ><input type="password" name="password" required /><br />
         <button type="submit">Login</button>
@@ -47,7 +69,8 @@
         ><input type="text" name="projectName" required /><br />
         <label>Description: </label><textarea name="description"></textarea
         ><br />
-        <label>Target Date: </label><input type="date" name="targetDate" /><br />
+        <label>Target Date: </label
+        ><input type="date" name="targetDate" /><br />
         <button type="submit">Create Project</button>
       </form>
     </div>
@@ -55,11 +78,17 @@
     <div id="AddMembers" class="tabcontent">
       <h2>Add Members</h2>
       <form id="memberForm">
-        <label>Member Name: </label>
-        <input type="text" name="memberName" required /><br />
+        <label>Project ID: </label>
+        <input type="number" name="projectID" required /><br />
         <label>Member Email: </label>
         <input type="email" name="memberEmail" required /><br />
-        <label>Member</label>
+        <label>Assign Role: </label>
+        <select name="role">
+          <option value="Viewer">Viewer</option>
+          <option value="Commenter">Commentor</option>
+          <option value="Editor">Editor</option>
+        </select>
+        <br />
         <button type="submit">Add Member</button>
       </form>
     </div>
@@ -67,12 +96,29 @@
     <div id="AddTasks" class="tabcontent">
       <h2>Add Tasks</h2>
       <form id="taskForm">
+        <label>Project ID: </label>
+        <input type="number" name="projectID" required /><br />
         <label>Task Name:</label
         ><input type="text" name="taskName" required /><br />
         <label>Due Date:</label><input type="date" name="dueDate" /><br />
+        <label>Priority: </label>
+        <select name="priority">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+        <br />
         <button type="submit">Add Task</button>
       </form>
     </div>
+
+    <div id="MyProjects" class="tabcontent">
+      <h2>My Dashboard</h2>
+      <div id="projectsContainer">
+        <p>Loading...</p>
+      </div>
+    </div>
+
     <script src="app.js"></script>
   </body>
 </html>
