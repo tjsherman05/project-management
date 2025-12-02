@@ -4,7 +4,7 @@ Our project is an easy-to-use project management system. The problem with many c
 
 # Instructions
 
-1. Open query1.sql to see how all the tables were created
+1. Open table_query.txt to see how all the tables were created
 
 2. Open report_queries to see specific queries that we ran
 
