@@ -1,0 +1,40 @@
+--query to get developer info and projects they are attached to
+SELECT
+    D.DeveloperID,
+    D.FName,
+    D.LName,
+    P.ProjectName,
+    PM.Role
+FROM Developer D
+JOIN Project_Management PM ON D.DeveloperID = PM.DeveloperID
+JOIN Project P ON PM.ProjectID = P.ProjectID
+ORDER BY P.ProjectName, D.LName;
+
+-- query to get only high priority tasks in order of target date
+SELECT
+    P.ProjectName,
+    T.TaskDescription,
+    T.StartDate,
+    T.TargetDate
+FROM Task T
+JOIN Project P ON T.ProjectID = P.ProjectID
+WHERE T.Priority = 'High'
+ORDER BY T.TargetDate ASC;
+
+-- query to get all task info. sort by high, medium, low
+SELECT
+    TaskID,
+    ProjectID,
+    TaskDescription,
+    StartDate,
+    TargetDate,
+    Priority
+FROM Task
+ORDER BY
+    CASE
+        WHEN Priority = 'High' THEN 1
+        WHEN Priority = 'Medium' THEN 2
+        WHEN Priority = 'Low' THEN 3
+        ELSE 4
+    END ASC,
+    TargetDate ASC;
